@@ -10,7 +10,7 @@ const Navbar = ({icon, title}) => {
       <nav className="black">
       <div className="nav-wrapper">
         <div className="container">
-        <Link to="/"><strong><i className={icon}></i> {title}</strong></Link>
+        <Link to="/" className="brand-logo"><i className={icon}></i> {title}</Link>
         <Link to="/about" className="right">About</Link>
         </div>
       </div>

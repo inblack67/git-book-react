@@ -1,29 +1,22 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, Fragment, useContext } from 'react';
 import Spinner from '../layout/Spinner';
 import { Link } from 'react-router-dom';
+import GithubContext from '../../context/github/githubContext';
 
-class User extends Component {
+const User = ( {match } ) => {
 
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    user: PropTypes.object.isRequired,
-    repos: PropTypes.array,
-    getSingleUser: PropTypes.func.isRequired
-  }
+  const githubContext = useContext(GithubContext);
 
-  componentDidMount()
-    {
-      this.props.getSingleUser(this.props.match.params.login);
-    }
+  const {user, loading, getSingleUser} = githubContext;
 
-  render() {
+    useEffect(() => {
+      getSingleUser(match.params.login);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
 
     // { name, avatar_url, location, bio, blog, login, html_url, followers, following, public_repos, public_gists, hireable }
 
-    const { avatar_url, location, bio, html_url } = this.props.user;
-
-    const {loading} = this.props;
+    const { name, avatar_url, location, bio, blog, login, html_url, followers, following, public_repos, public_gists, hireable } = user;
 
     if(loading)
     {
@@ -33,7 +26,6 @@ class User extends Component {
     {
       return (
         <Fragment>
-          <Link className="btn red" to="/">Search</Link>
 
           <div className="card">
             <div className="row">
@@ -49,21 +41,42 @@ class User extends Component {
                 <br/>
                 <h6>Location: <strong>{location}</strong></h6>
                 <br/>
+
+                { hireable && (
+                  <h6>Hireable: Yes</h6>
+                ) }
+                { !hireable && (
+                  <h6>Hireable: No</h6>
+                ) }
+
+                <br/>
+
                 <a href={html_url} className="btn green waves-effect waves-light">Profile</a>
+                <br/>
+                <hr/>
+                <br/>
+                <Link className="btn red" to="/">Search Another</Link>
                 </div>
               </div>
+              
             </div>
+
           </div>
 
-          <div className="card">
-            <div className="card-content">
-              <p className="flow-text">I will get back to you on this one</p>
-            </div>
-          </div>
+    <div className="collection">
+    <a href="#!" className="collection-item"><span className="badge">{name}</span>Name</a>
+    <a href="#!" className="collection-item"><span className="badge">{blog}</span>Blog</a>
+    <a href="#!" className="collection-item"><span className="badge">{login}</span>Login</a>
+    <a href="#!" className="collection-item"><span className="badge">{public_repos}</span>Repos</a>
+    <a href="#!" className="collection-item"><span className="badge">{public_gists}</span>Gists</a>
+    <a href="#!" className="collection-item"><span className="badge">{followers}</span>Followers</a>
+    <a href="#!" className="collection-item"><span className="badge">{following}</span>Following</a>
+
+  </div>
+
         </Fragment>
       )
     }
-  }
 }
 
-export default User
+export default User;
